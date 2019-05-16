@@ -1,6 +1,6 @@
 setlocal commentstring='\ %s
 setlocal comments=n:',n:rem
-setlocal iskeyword+=$,%,!,&
+setlocal iskeyword+=$,%,#,!,&
 setlocal tabstop=2
 setlocal softtabstop=2
 setlocal shiftwidth=2
