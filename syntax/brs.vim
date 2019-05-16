@@ -1,19 +1,27 @@
+" brightscript is case insensitive
 syn case ignore
+
+" function calls
 syn region functContent matchgroup=brsFunct start="\v\.?<[A-z0-9]+\(" end="\v\)" contains=ALL
 
+" constants {{{
 syn keyword brsConstants
     \ invalid
 syn keyword brsBool
     \ true
     \ false
+" }}}
 
+" control keywords (exit, stop, etc) {{{
 syn match brsKeywords "\v\c<end\s*$"
 syn keyword brsKeywords as nextgroup=brsType skipwhite
 syn keyword brsKeywords
     \ exit
     \ stop
     \ return
+" }}}
 
+" conditional statements {{{
 syn keyword brsCondit
     \ if
     \ then
@@ -21,6 +29,7 @@ syn keyword brsCondit
 syn match brsCondit "\v\c(end|else) ?if"
 " }}}
 
+" loops {{{
 syn keyword brsLoop
     \ for
     \ while
@@ -30,13 +39,17 @@ syn keyword brsLoop
     \ step
 syn match brsLoop "\v\c<end ?(for|while)>"
 syn match brsLoop "\v\c^\s*next>"
+" }}}
 
+" function declaration {{{
 syn keyword brsFunctDef
     \ sub
     \ function
 syn match brsFunctDef "\v\c<end ?sub>"
 syn match brsFunctDef "\v\c<end function>"
+" }}}
 
+" misc. reserved keywords {{{
 syn keyword brsReserved
     \ LINE_NUM
     \ getglobalaa
@@ -49,13 +62,16 @@ syn keyword brsReserved
     \ goto
     \ run
     \ dim
+" }}}
 
+" conditional compilation
 syn match brsCondComp "\v^\s*\zs#(else|(end )?if)"
 
-syn match brsDelim "\v,|:|;" 
-
+" library import
 syn keyword brsLib library
-
+ 
+" operators & deliminators {{{
+syn match brsDelim "\v,|:|;" 
 syn match brsOp "\v\="
 syn match brsOp "\v\*"
 syn match brsOp "\v/"
@@ -82,19 +98,25 @@ syn match brsOp "\v\["
 syn match brsOp "\v\]"
 syn match brsOp "\v\{"
 syn match brsOp "\v\}"
+" }}}
 
+" numbers {{{
 syn match brsNumber "\v<\d+>"
 syn match brsNumber "\v<0x\x+>"
 syn match brsNumber "\v<\d+(\.\d+)?e\+?\d+(\.\d+)?>"
-
 syn match brsFloat "\v<\d+\.\d+>"
+" }}}
 
+" debug output
 syn match brsOut "\v^\s*\zs(\?|print\s+)" contains=ALL
 
+" comments {{{
 syn match brsComment "\v'.*$" contains=brsTodos
 syn match brsComment "\v\c<rem .*$" contains=brsTodos
 syn match brsTodos "\v\c'\s*\zs<(TODO|NB|FIXME|NOTE|FYI|BUG|INFO)>.*$" contained
+" }}}
 
+" variable types {{{
 syn keyword brsType
     \ Boolean
     \ bool
@@ -108,9 +130,12 @@ syn keyword brsType
     \ Interface
     \ Dynamic
 syn match brsType "\v\c<(int|str)>\(\@1!"
+" }}}
 
+" strings
 syn region brsString start=/"/ end=/"/ oneline 
 
+" roku component classes {{{
 syn match brsComponents '\v\c("?)roAppInfo\1' 
 syn match brsComponents '\v\c("?)roAppManager\1' 
 syn match brsComponents '\v\c("?)roArray\1' 
@@ -219,7 +244,9 @@ syn match brsComponents '\v\c("?)roVideoScreen\1'
 syn match brsComponents '\v\c("?)roVideoScreenEvent\1' 
 syn match brsComponents '\v\c("?)roXMLElement\1' 
 syn match brsComponents '\v\c("?)roXMLList\1'
+" }}}
 
+" roku component interfaces {{{
 syn match brsInterfaces '\v\c("?)ifAppInfo\1' 
 syn match brsInterfaces '\v\c("?)ifAppManager\1' 
 syn match brsInterfaces '\v\c("?)ifArray\1' 
@@ -316,9 +343,9 @@ syn match brsInterfaces '\v\c("?)ifVideoPlayer\1'
 syn match brsInterfaces '\v\c("?)ifVideoScreen\1' 
 syn match brsInterfaces '\v\c("?)ifXMLElement\1' 
 syn match brsInterfaces '\v\c("?)<ifXMLList>\1' 
+" }}}
 
-"syn region brsFold start="\c^\s*\z(function\|sub\|for\|while\)\((.*)\)\?\>" end="\v\c<end \z1" transparent fold keepend extend
-
+" highlight colors {{{
 hi default link brsKeywords Keyword
 hi default link brsNumber Number
 hi default link brsFloat Float
@@ -340,5 +367,6 @@ hi default link brsCondit Conditional
 hi default link brsLoop Repeat
 hi default link brsDelim Delimiter
 hi default link brsFunctDef Structure
+" }}}
 
-" vim:et:sw=4:ts=4:
+" vim:et:sw=4:ts=4:fdm=marker:
