@@ -3,7 +3,6 @@ syn region functContent matchgroup=brsFunct start="\v\.?<[A-z0-9]+\(" end="\v\)"
 
 syn keyword brsConstants
     \ invalid
-
 syn keyword brsBool
     \ true
     \ false
@@ -13,19 +12,14 @@ syn keyword brsKeywords as nextgroup=brsType skipwhite
 syn keyword brsKeywords
     \ exit
     \ stop
-    \ endif
-    \ endsub
-    \ endwhile
-    \ exitwhile
-    \ elseif
     \ return
 
 syn keyword brsCondit
     \ if
     \ then
-    \ else
     \ not
-syn match brsCondit "\v\cend if"
+syn match brsCondit "\v\c(end|else) ?if"
+" }}}
 
 syn keyword brsLoop
     \ for
@@ -34,13 +28,13 @@ syn keyword brsLoop
     \ in
     \ to
     \ step
-syn match brsLoop "\v\c<end (for|while)>"
+syn match brsLoop "\v\c<end ?(for|while)>"
 syn match brsLoop "\v\c^\s*next>"
 
 syn keyword brsFunctDef
     \ sub
     \ function
-syn match brsFunctDef "\v\c<end sub>"
+syn match brsFunctDef "\v\c<end ?sub>"
 syn match brsFunctDef "\v\c<end function>"
 
 syn keyword brsReserved
