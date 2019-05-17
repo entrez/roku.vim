@@ -1,5 +1,6 @@
 " brightscript is case insensitive
 syn case ignore
+syn iskeyword @,48-57,192-255,$,%,#,!,&,.
 
 " function calls
 syn region functContent matchgroup=brsFunct start="\v\.?<[A-z0-9]+\(" end="\v\)" contains=ALL
@@ -70,7 +71,7 @@ syn match brsCondComp "\v^\s*\zs#(else|(end )?if)"
 " library import
 syn keyword brsLib library
  
-" operators & deliminators {{{
+" operators & delimiters {{{
 syn match brsDelim "\v,|:|;" 
 syn match brsOp "\v\="
 syn match brsOp "\v\*"
@@ -101,10 +102,15 @@ syn match brsOp "\v\}"
 " }}}
 
 " numbers {{{
-syn match brsNumber "\v<\d+>"
-syn match brsNumber "\v<0x\x+>"
-syn match brsNumber "\v<\d+(\.\d+)?e\+?\d+(\.\d+)?>"
-syn match brsFloat "\v<\d+\.\d+>"
+syn match brsHex "\v\c<&H\x+>"
+syn match brsInteger "\v<\d+\.?>"
+syn match brsLong "\v<\d+&>"
+syn match brsFloat "\v<\d+(\.\d+)?e(\+|-)?\d+(\.\d+)?!?>"
+syn match brsFloat "\v<(\d+!|(\d+)?\.\d+!?)>"
+syn match brsDouble "\v<(\d|(\..*)@<!\.(.*\.)@!){11,}>"
+syn match brsDouble "\v<\d{10,}#?>"
+syn match brsDouble "\v<\d+(\.\d+)?d((\+|-)\d+(\.\d+)?)?#?>"
+syn match brsDouble "\v<\d+(\.\d+)?#>"
 " }}}
 
 " debug output
@@ -346,26 +352,43 @@ syn match brsInterfaces '\v\c("?)<ifXMLList>\1'
 " }}}
 
 " highlight colors {{{
+" keywords
 hi default link brsKeywords Keyword
-hi default link brsNumber Number
+" numbers
+hi default link brsInteger Number
+hi default link brsHex brsInteger
+hi default link brsLong brsInteger
 hi default link brsFloat Float
+hi default link brsDouble brsFloat
+" comments
 hi default link brsComment Comment
 hi default link brsTodos Todo
+" strings
 hi default link brsString String
+" console output
 hi default link brsOut Debug
+" include
 hi default link brsLib Include
+" function declaration
 hi default link brsFunct Function
+" operators & delimiters
 hi default link brsOp Operator
+hi default link brsDelim Delimiter
+" constants
 hi default link brsConstants Constant
 hi default link brsBool Boolean
+" conditional compilation
 hi default link brsCondComp PreCondit
+" reserved
 hi default link brsReserved Special
+" roku components & interfaces 
 hi default link brsInterfaces Identifier
 hi default link brsComponents brsInterfaces
+" types
 hi default link brsType Underlined
+" flow control operations
 hi default link brsCondit Conditional
 hi default link brsLoop Repeat
-hi default link brsDelim Delimiter
 hi default link brsFunctDef Structure
 " }}}
 
