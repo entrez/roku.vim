@@ -392,4 +392,4 @@ hi default link brsLoop Repeat
 hi default link brsFunctDef Structure
 " }}}
 
-" vim:et:sw=4:ts=4:fdm=marker:
+" vim:et:sw=4:ts=4:fdm=marker

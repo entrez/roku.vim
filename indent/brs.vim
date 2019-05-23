@@ -61,4 +61,4 @@ endfunc
 let &cpo = s:cpo_save
 unlet s:cpo_save
 
-" vim:et:sw=4:ts=4:
+" vim:et:sw=4:ts=4
