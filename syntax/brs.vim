@@ -26,7 +26,6 @@ syn keyword brsKeywords
 syn keyword brsCondit
     \ if
     \ then
-    \ not
 syn match brsCondit "\v\c(end|else) ?if"
 " }}}
 
@@ -78,6 +77,9 @@ syn match brsOp "\v\*"
 syn match brsOp "\v/"
 syn match brsOp "\v\\"
 syn match brsOp "\v\*\="
+syn match brsOp "\v\c<and>"
+syn match brsOp "\v\c<or>"
+syn match brsOp "\v\c<not>"
 syn match brsOp "\v//="
 syn match brsOp "\v\\\="
 syn match brsOp "\v\+"
@@ -185,7 +187,7 @@ syn match brsComponents '\v\c("?)roImageCanvasEvent\1'
 syn match brsComponents '\v\c("?)roImageMetadata\1' 
 syn match brsComponents '\v\c("?)roInput\1' 
 syn match brsComponents '\v\c("?)roInputEvent\1' 
-syn match brsComponents '\v\c("?)roInt\1' 
+syn match brsComponents '\v\c("?)roInt(eger)?\1' 
 syn match brsComponents '\v\c("?)roInvalid\1' 
 syn match brsComponents '\v\c("?)roKeyboardScreen\1' 
 syn match brsComponents '\v\c("?)roKeyboardScreenEvent\1' 
@@ -392,4 +394,4 @@ hi default link brsLoop Repeat
 hi default link brsFunctDef Structure
 " }}}
 
-" vim:et:sw=4:ts=4:fdm=marker
+" vim:et:sw=4:ts=4:fdm=marker:
