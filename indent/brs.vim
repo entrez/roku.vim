@@ -40,7 +40,7 @@ func! BrsIndent(lnum) abort
         let ind += shiftwidth()
     endif
 
-    if (pline =~ '[' && pline !~ ']') || (pline =~ '{' && pline !~ ']')
+    if (pline =~ '[' && pline !~ ']') || (pline =~ '{' && pline !~ '}')
         let ind += shiftwidth()
     endif 
     if (line =~ ']' && line !~ '[') || (line =~ '}' && line !~ '{')
