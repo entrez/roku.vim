@@ -27,6 +27,7 @@ syn keyword brsCondit
     \ if
     \ then
 syn match brsCondit "\v\c(end|else) ?if"
+syn match brsCondit "\v\c<else>"
 " }}}
 
 " loops {{{
@@ -65,7 +66,7 @@ syn keyword brsReserved
 " }}}
 
 " conditional compilation
-syn match brsCondComp "\v^\s*\zs#(else|(end )?if)"
+syn match brsCondComp "\v^\s*\zs#(else( if)?|(end )?if)"
 
 " library import
 syn keyword brsLib library
