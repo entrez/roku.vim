@@ -1,18 +1,17 @@
 setl fdm=expr
 setl fde=BrsFold(v:lnum)
 setl fml=2
-%foldo!
 
-func! s:BrsFold(lnum)
-    if getline(lnum) =~? '\v^\s*$'
+func! BrsFold(lnum)
+    if getline(a:lnum) =~? '\v^\s*$'
         return '-1'
     endif
 
-    let lind = IndentLevel(lnum)
-    let plind = IndentLevel(PrevNonBlankLine(lnum))
-    let nlind = IndentLevel(NextNonBlankLine(lnum))
+    let lind = s:IndentLevel(a:lnum)
+    let plind = s:IndentLevel(prevnonblank(a:lnum-1))
+    let nlind = s:IndentLevel(nextnonblank(a:lnum+1))
 
-    if plind > lind && getline(lnum) =~? '\v\c^\s*#?(else|end)>'
+    if plind > lind && getline(a:lnum) =~? '\v\c^\s*#?(end|else)>'
         return plind
     elseif nlind == lind
         return lind
@@ -24,13 +23,13 @@ func! s:BrsFold(lnum)
 endfunc
 
 func! s:IndentLevel(lnum)
-    return indent(lnum) / &shiftwidth
+    return indent(a:lnum) / &shiftwidth
 endfunc
 
 func! s:NextNonBlankLine(lnum)
     let numlines = line('$')
     
-    for current in range(lnum + 1, numlines)
+    for current in range(a:lnum + 1, numlines)
         if getline(current) =~? '\v\S'
             return current
         endif
@@ -40,7 +39,7 @@ func! s:NextNonBlankLine(lnum)
 endfunc
 
 func! s:PrevNonBlankLine(lnum)
-    for current in range(lnum - 1, 0, -1)
+    for current in range(a:lnum - 1, 0, -1)
         if getline(current) =~? '\v\S'
             return current
         endif
