@@ -11,7 +11,7 @@ func! BrsFold(lnum)
     let plind = s:indentCt(prevnonblank(a:lnum-1))
     let nlind = s:indentCt(nextnonblank(a:lnum+1))
 
-    if plind > lind && getline(a:lnum) =~? '\v^\s*#?(end|else)>'
+    if plind > lind && getline(a:lnum) =~? '\v^\s*(#?(end|else)>|[]})])'
         return plind
     elseif nlind > lind
         return '>' . nlind
