@@ -1,9 +1,9 @@
 " brightscript is case insensitive
 syn case ignore
-syn iskeyword @,48-57,192-255,$,%,#,!,&,.
+syn iskeyword @,48-57,192-255,$,%,#,!,&
 
 " function calls
-syn region functContent matchgroup=brsFunct start="\v\.?<[A-z0-9]+\(" end="\v\)" contains=ALL
+syn region functContent matchgroup=brsFunct start="\v\.?<\w+\(" end="\v\)" contains=ALL
 
 " constants {{{
 syn keyword brsConstants
