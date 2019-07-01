@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+
+# rokupkg: package and download the current 
+#          sideloaded app on a roku device
+# usage:   
+#
+#    rokupkg [<device>] [-u|--user <user:pass>]
+#        [-p|--pkgpass <password>] [-o|
+#        --out <path>] [--remove-old]
+#
+# arguments:
+#  device        roku ip or hostname
+#
+# options:
+#  -u|--user     device login creds
+#  -p|--pkgpass  packaging password 
+#  -o|--out      path to destination
+#  --remove-old  delete old pkg files
+
+# copyright 2019 entrez (github.com/entrez)
+# this software is issued with no warranty,
+# express or implied, in any respect.
+
+remove=false
+while [ $# -gt 0 ]; do
+    case "${1}" in
+        -h|--help|help)
+            echo 'usage: rokupkg [<device>] [-u|--user <user:pass>] [-p|--pkgpass <password>] [-o|--out <path>] [--remove-old]' >&2
+            echo -e '\narguments:' >&2
+            echo 'device        roku ip or hostname' >&2
+            echo -e '\noptions:' >&2
+            echo '-u|--user     device login creds' >&2
+            echo '-p|--pkgpass  packaging password' >&2
+            echo '-o|--out      path to destination' >&2
+            echo '--remove-old  delete old pkg files' >&2
+            exit 0
+            ;;
+        -o|--out)
+            if [ -n "${2}" ] && [ -d "${2}" ]; then
+                dest="${2}"
+                shift
+            else
+                echo 'usage: rokupkg [<device>] [-u|--user <user:pass>] [-p|--pkgpass <password>] [-o|--out <path>]' >&2
+                [ -z "${2}" ] && echo "error: arg missing after ${1}" >&2 || \
+                [ -e "${2}" ] && echo "error: not a valid dir: ${2}" >&2 || \
+                echo "error: does not exist: ${2}" >&2
+                exit 1
+            fi
+            ;;
+        -u|--user)
+            if [[ -n "${2}" && "${2}" =~ ':' ]]; then
+                ROKU_USER="${2%%:*}"
+                ROKU_PASS="${2#*:}"
+                shift
+            else
+                echo 'usage: rokupkg [<device>] [-u|--user <user:pass>] [-p|--pkgpass <password>] [-o|--out <path>]' >&2
+                [ -z "${2}" ] && echo "error: arg missing after ${1}" >&2 || \
+                echo 'error: missing pass' >&2
+                exit 1
+            fi
+            ;;
+        -p|--pkgpass)
+            if [ -n "${2}" ]; then
+                ROKU_PACKAGE_PASS="${2}"
+                shift
+            else
+                echo 'usage: rokupkg [<device>] [-u|--user <user:pass>] [-p|--pkgpass <password>] [-o|--out <path>]' >&2
+                echo "error: arg missing after ${1}" >&2
+                exit 1
+            fi
+            ;;
+        --remove-old)
+            remove=true
+            ;;
+        *)
+            if [ "${1::1}" == '-' ]; then
+                echo 'usage: rokupkg [<device>] [-u|--user <user:pass>] [-p|--pkgpass <password>] [-o|--out <path>]' >&2
+                echo "error: unexpected option: ${1}" >&2
+                exit 1
+            else
+                ROKU_IP="${1}"
+            fi
+            ;;
+    esac
+    shift
+done
+
+[ -n "${ROKU_IP}" ] || ROKU_IP=""
+[[ "${ROKU_IP}" =~ [^.0-9] ]] && ROKU_IP=$(cat /etc/hosts | awk "/${ROKU_IP//\//\\/}/ { print \$1 }")
+[ -z "${ROKU_IP}" ] && echo 'rokupkg: error: invalid hostname' >&2 && exit 1
+
+[ -n "${ROKU_USER}" ] || ROKU_USER='rokudev'
+[ -n "${ROKU_PASS}" ] || ROKU_PASS=''
+[ -n "${ROKU_PACKAGE_PASS}" ] || ROKU_PACKAGE_PASS=''
+if [ -z "${dest}" ]; then
+    if [ -e 'manifest' ]; then
+        dest="${PWD}"
+    else
+        curr="${PWD}"
+        while [ ! -e 'manifest' ] && [ "${PWD}" != '/' ]; do
+            cd ..
+        done
+        if [ -e 'manifest' ]; then
+            [ -d 'out' ] || mkdir out
+            dest="${PWD}/out"
+        else
+            dest="${curr}"
+        fi
+    fi
+fi
+
+
+appname=$(curl -fs "${ROKU_IP}:8060/query/apps" | sed -n -E 's/&apos\;//;s/^.*<app id="dev".*version="([0-9.]+)">(.*)<\/app>/\2\/\1/p')
+
+if [ $? -ne 0 ]; then
+  echo "rokupkg: error: unable to reach device [exit $?]" >&2
+  exit 1
+elif [ -z "${appname}" ]; then
+  echo "rokupkg: error: can't identify dev app" >&2
+  exit 1
+else
+  response=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "${ROKU_IP}/plugin_package" \
+            -F "pkg_time=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")" \
+            -F "app_name=${appname}" -F "passwd=${ROKU_PACKAGE_PASS}" -F "mysubmit=Package")
+  result=$(sed -n -E 's/.*<font color="red">([^\s]*)<?/\1/p' <<< "$response")
+  echo "${result}" | tr '[[:upper:]]' '[[:lower:]]' >&2
+  if [[ "${result}" == 'Success.' ]]; then
+    packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response") && \
+        if [ "${remove}" == 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ]; then
+        rm "${dest%/}"/*.pkg
+    fi
+    curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "${ROKU_IP}/${packagepath}.pkg" -o "${dest%/}/${packagepath##*/}.pkg"
+    if [[ $? -ne 0 ]]; then
+      echo "rokupkg: error: failure downloading pkg [exit $?]" >&2
+    else
+      #echo "${dest%/}/${packagepath##*/}.pkg"
+      echo "${packagepath##*/}.pkg"
+    fi
+  else
+    exit 1
+  fi
+fi
