@@ -71,7 +71,7 @@ if [ ! -e 'manifest' ]; then
 fi
 
 if [ -z "${ROKU_IP}" ]; then
-    echo 'missing destination device: set $ROKU_IP or include as a second argument' >&2
+    echo 'missing destination device: include a device ip or hostname' >&2
     exit 1
     # comment out above two lines & replace this with a fallback/default device ip if desired:
     ROKU_IP="" 

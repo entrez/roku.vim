@@ -13,7 +13,8 @@ func! RokuInstall()
     endif
 
     echom 'compressing & sending channel to ' . g:roku_ip
-    let s:result = split(system(s:path . 'install "' . bufname('%') . '" -d ' . g:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password), '\n')
+    let s:result = split(system(s:path . 'install "' . bufname('%') . '" -u ' . g:roku_username . ':' . g:roku_password .
+                \ ' -d ' . g:roku_ip), '\n')
     echom join(s:result)
 endfunc
 
