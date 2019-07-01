@@ -43,7 +43,7 @@ func! RokuPackage()
     endif
 
     echom 'packaging channel'
-    let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . '-u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
+    let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . g:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
     echom join(s:result)
 endfunc
 
