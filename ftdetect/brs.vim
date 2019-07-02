@@ -8,6 +8,16 @@ fun! s:RokuCheck()
     if glob(fnamemodify(bufname('%'), ':p:h') . '/source/*.brs') != '' || glob(fnamemodify(bufname('%'), ':p:h') . '*.brs') != ''
         nnoremap <buffer> <leader>; :call installpkg#RokuInstall()<cr>
         nnoremap <buffer> <leader>' :call installpkg#RokuPackage()<cr>
+    else
+        let s:steps = ':p:h:h'
+        while glob(fnamemodify(bufname('%'), s:steps) . '/*') != glob('//*') && glob(fnamemodify(bufname('%'), s:steps) . '/manifest') == ''
+            let s:steps .= ':h'
+        endwhile
+
+        if glob(fnamemodify(bufname('%'), s:steps) . '/source/*.brs') != ''
+            nnoremap <buffer> <leader>; :call installpkg#RokuInstall()<cr>
+            nnoremap <buffer> <leader>' :call installpkg#RokuPackage()<cr>
+        endif 
     endif
 endfun
 
