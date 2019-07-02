@@ -119,7 +119,9 @@ if [ $? -eq 0 ]; then
     resp=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "${ROKU_IP}/plugin_install" \
         -F "archive=@out/bundle.zip;type:application/zip" -F "mysubmit=replace" -F "passwd=")
     result=$?
-    sed -n -E 's/.*<font color="red">([^<]+).*/\1/p' <<< "${resp}" | tr '[[:upper:]]' '[[:lower:]]'
+    msg="$(sed -n -E 's/.*<font color="red">([^<]+).*/\1/p' <<< "${resp}" | tr '[[:upper:]]' '[[:lower:]]')"
+    [ -z "${msg}" ] && msg="error compiling or installing channel."
+    echo "${msg}" >&2
     exit ${result}
 fi
 
