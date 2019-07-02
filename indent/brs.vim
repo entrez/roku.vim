@@ -6,7 +6,7 @@ let b:did_indent = 1
 setl nolisp
 setl nocindent
 setl autoindent
-setl indentkeys=0{,0},0[,0],e,o,O,!^F,=~end,=~else,=~next
+setl indentkeys=0{,0},0[,0],e,o,O,!^F,=~end,=~else,=~next,=~#end,=~#else
 setl indentexpr=BrsIndent(v:lnum)
 "setl foldmethod=indent
 
@@ -36,6 +36,9 @@ func! BrsIndent(lnum) abort
     elseif pline =~ '\c^\s*\(else \)\?\(if\|while\) \?\(not \)\?\(\S\+\|"[^"]*"\)\+\(\s*\([-+*/^><=]\{1,2}\|and\|or\)\s*\(not \)\?\(\S\+\|"[^"]*"\)\)*\(then\)\?\s*$'
         " indent lines after `if' statements only if it's not a one-line `if'
         let ind += shiftwidth()
+    elseif pline =~ '\c^\s*\#\(else\( if\)\?\|if\)\>.*'
+        " indent lines in conditional compilation if statements
+        let ind += shiftwidth()
     elseif pline =~ '\c^\s*\<else\>\s*$'
         let ind += shiftwidth()
     endif
@@ -47,11 +50,11 @@ func! BrsIndent(lnum) abort
         let ind -= shiftwidth()
     endif
 
-    if line =~ '\c^\s*\<end\>'
+    if line =~ '\c^\s*#\?end\>'
         let ind -= shiftwidth()
     elseif line =~ '\c^\s*\<next\>'
         let ind -= shiftwidth()
-    elseif line =~ '\c^\s*\<else\>'
+    elseif line =~ '\c^\s*#\?else\>'
         let ind -= shiftwidth()
     endif
 
