@@ -66,7 +66,7 @@ syn keyword brsReserved
 " }}}
 
 " conditional compilation
-syn match brsCondComp "\v^\s*\zs#(else( if)?|(end )?if)"
+syn match brsCondComp "\v\c^\s*\zs#(else( if)?|(end )?if|error)"
 
 " library import
 syn keyword brsLib library
