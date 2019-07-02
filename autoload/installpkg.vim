@@ -2,13 +2,13 @@ let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h:h') . '/roku_scripts/
 
 func! installpkg#RokuInstall(...)
     if !exists('g:roku_ip') && a:0 == 0
-        echoe 'missing valid hostname or ip - set g:roku_ip or use RokuInstall <ip>'
+        echoh ErrorMsg | echom 'roku: missing valid hostname or ip - set g:roku_ip or use RokuInstall <ip>'
         return
     elseif !exists('g:roku_username')
-        echoe 'missing device username - set g:roku_username'
+        echoh ErrorMsg | echom 'roku: missing device username - set g:roku_username'
         return
     elseif !exists('g:roku_password')
-        echoe 'missing device password - set g:roku_password'
+        echoh ErrorMsg | echom 'roku: missing device password - set g:roku_password'
         return
     endif
 
@@ -22,16 +22,16 @@ endfunc
 
 func! installpkg#RokuPackage(...)
     if !exists('g:roku_ip') && a:0 == 0
-        echoe 'missing valid hostname or ip - set g:roku_ip'
+        echoh ErrorMsg | echom 'roku: missing valid hostname or ip - set g:roku_ip or use RokuPackage <ip>'
         return
     elseif !exists('g:roku_pkg_pass')
-        echoe 'missing packaging password - set g:roku_pkg_pass'
+        echoh ErrorMsg | echom 'roku: missing packaging password - set g:roku_pkg_pass'
         return
     elseif !exists('g:roku_username')
-        echoe 'missing device username - set g:roku_username'
+        echoh ErrorMsg | echom 'roku: missing device username - set g:roku_username'
         return
     elseif !exists('g:roku_password')
-        echoe 'missing device password - set g:roku_password'
+        echoh ErrorMsg | echom 'roku: missing device password - set g:roku_password'
         return
     endif
 
