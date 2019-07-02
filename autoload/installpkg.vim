@@ -1,8 +1,8 @@
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h:h') . '/roku_scripts/'
 
-func! installpkg#RokuInstall()
-    if !exists('g:roku_ip')
-        echoe 'missing valid hostname or ip - set g:roku_ip'
+func! installpkg#RokuInstall(...)
+    if !exists('g:roku_ip') && a:0 == 0
+        echoe 'missing valid hostname or ip - set g:roku_ip or use RokuInstall <ip>'
         return
     elseif !exists('g:roku_username')
         echoe 'missing device username - set g:roku_username'
@@ -12,14 +12,16 @@ func! installpkg#RokuInstall()
         return
     endif
 
-    echom 'compressing channel & uploading to roku (' . g:roku_ip . ')'
+    let s:roku_ip = a:0 > 0 ? a:1 : g:roku_ip
+
+    echom 'compressing channel & uploading to roku (' . s:roku_ip . ')'
     let s:result = split(system(s:path . 'install "' . bufname('%') . '" -u ' . g:roku_username . ':' . g:roku_password .
-                \ ' -d ' . g:roku_ip), '\n')
+                \ ' -d ' . s:roku_ip), '\n')
     echom join(s:result)
 endfunc
 
-func! installpkg#RokuPackage()
-    if !exists('g:roku_ip')
+func! installpkg#RokuPackage(...)
+    if !exists('g:roku_ip') && a:0 == 0
         echoe 'missing valid hostname or ip - set g:roku_ip'
         return
     elseif !exists('g:roku_pkg_pass')
@@ -33,6 +35,8 @@ func! installpkg#RokuPackage()
         return
     endif
 
+    let s:roku_ip = a:0 > 0 ? a:1 : g:roku_ip
+
     if !exists('g:roku_remove_old_pkg')
         let s:remove = ' --remove-old '
     else
@@ -44,6 +48,6 @@ func! installpkg#RokuPackage()
     endif
 
     echom 'packaging channel'
-    let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . g:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
+    let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . s:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
     echom join(s:result)
 endfunc
