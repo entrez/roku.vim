@@ -1,6 +1,6 @@
-let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h:h:h') . '/roku_scripts/'
+let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h:h') . '/roku_scripts/'
 
-func! RokuInstall()
+func! installpkg#RokuInstall()
     if !exists('g:roku_ip')
         echoe 'missing valid hostname or ip - set g:roku_ip'
         return
@@ -18,7 +18,7 @@ func! RokuInstall()
     echom join(s:result)
 endfunc
 
-func! RokuPackage()
+func! installpkg#RokuPackage()
     if !exists('g:roku_ip')
         echoe 'missing valid hostname or ip - set g:roku_ip'
         return
@@ -47,18 +47,3 @@ func! RokuPackage()
     let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . g:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
     echom join(s:result)
 endfunc
-
-autocmd BufNewFile,BufRead manifest call BrsManifestCheck() 
-autocmd BufNewFile,BufRead *.brs call BrsManifestCheck() 
-autocmd BufNewFile,BufRead *.xml call BrsManifestCheck() 
-
-fun! BrsManifestCheck()
-    cd %p:h
-    if glob('source/*.brs') != '' || glob('*.brs') != ''
-        nnoremap <buffer> <leader>; :call RokuInstall()<cr>
-        nnoremap <buffer> <leader>' :call RokuPackage()<cr>
-    endif
-    cd -
-endfun
-
-
