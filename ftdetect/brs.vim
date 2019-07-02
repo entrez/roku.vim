@@ -15,8 +15,10 @@ fun! s:RokuCheck()
         endwhile
 
         if glob(fnamemodify(bufname('%'), s:steps) . '/source/*.brs') != ''
-            nnoremap <buffer> <leader>; :call installpkg#RokuInstall()<cr>
-            nnoremap <buffer> <leader>' :call installpkg#RokuPackage()<cr>
+            com! -nargs=? RokuInstall call installpkg#RokuInstall(<args>)
+            com! -nargs=? RokuPackage call installpkg#RokuPackage(<args>)
+            nnoremap <buffer> <leader>; :RokuInstall<cr>
+            nnoremap <buffer> <leader>' :RokuPackage<cr>
         endif 
     endif
 endfun
