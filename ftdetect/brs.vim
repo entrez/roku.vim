@@ -16,8 +16,8 @@ fun! s:RokuCheck()
 
         if glob(fnamemodify(bufname('%'), s:steps) . '/source/*.brs') != '' &&
                     \ glob(fnamemodify(bufname('%'), s:steps) . '/manifest') != ''
-            com! -nargs=? RokuInstall call installpkg#RokuInstall(<args>)
-            com! -nargs=? RokuPackage call installpkg#RokuPackage(<args>)
+            com! -nargs=? -buffer RokuInstall :call installpkg#RokuInstall(<args>)
+            com! -nargs=? -buffer RokuPackage :call installpkg#RokuPackage(<args>)
             nnoremap <buffer> <leader>; :RokuInstall<cr>
             nnoremap <buffer> <leader>' :RokuPackage<cr>
         endif 
