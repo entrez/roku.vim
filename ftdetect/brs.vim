@@ -1,8 +1,8 @@
-autocmd BufNewFile,BufRead *.brs setfiletype brs
+au BufNewFile,BufRead *.brs setfiletype brs
 
-autocmd BufNewFile,BufRead manifest call s:RokuCheck() 
-autocmd BufNewFile,BufRead *.brs call s:RokuCheck() 
-autocmd BufNewFile,BufRead *.xml call s:RokuCheck() 
+au BufNewFile,BufRead manifest call s:RokuCheck() 
+au BufNewFile,BufRead *.brs call s:RokuCheck() 
+au BufNewFile,BufRead *.xml call s:RokuCheck() 
 
 fun! s:RokuCheck()
     if glob(fnamemodify(bufname('%'), ':p:h') . '/source/*.brs') != '' || glob(fnamemodify(bufname('%'), ':p:h') . '*.brs') != ''
@@ -14,7 +14,8 @@ fun! s:RokuCheck()
             let s:steps .= ':h'
         endwhile
 
-        if glob(fnamemodify(bufname('%'), s:steps) . '/source/*.brs') != ''
+        if glob(fnamemodify(bufname('%'), s:steps) . '/source/*.brs') != '' &&
+                    \ glob(fnamemodify(bufname('%'), s:steps) . '/manifest') != ''
             com! -nargs=? RokuInstall call installpkg#RokuInstall(<args>)
             com! -nargs=? RokuPackage call installpkg#RokuPackage(<args>)
             nnoremap <buffer> <leader>; :RokuInstall<cr>
