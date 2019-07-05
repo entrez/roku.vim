@@ -1,8 +1,6 @@
 augroup roku_project_detect
     au!
-    au BufNewFile,BufRead manifest call s:RokuCheck() 
-    au BufNewFile,BufRead *.brs call s:RokuCheck() 
-    au BufNewFile,BufRead *.xml call s:RokuCheck() 
+    au BufNewFile,BufRead manifest,translations.ts,*.brs,*.xml call s:RokuCheck() 
 augroup END
 
 fun! s:RokuCheck()
