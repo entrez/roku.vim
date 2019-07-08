@@ -94,7 +94,8 @@ done
 [ -n "${ROKU_PACKAGE_PASS}" ] || ROKU_PACKAGE_PASS=''
 if [ -z "${dest}" ]; then
     if [ -e 'manifest' ]; then
-        dest="${PWD}"
+        [ -d 'out' ] || mkdir out
+        dest="${PWD}/out"
     else
         curr="${PWD}"
         while [ ! -e 'manifest' ] && [ "${PWD}" != '/' ]; do
