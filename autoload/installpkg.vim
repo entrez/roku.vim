@@ -36,16 +36,7 @@ func! installpkg#RokuPackage(...)
     endif
 
     let s:roku_ip = a:0 > 0 ? a:1 : g:roku_ip
-
-    if !exists('g:roku_remove_old_pkg')
-        let s:remove = ' --remove-old '
-    else
-        if g:roku_remove_old
-            let s:remove = ' --remove-old '
-        else
-            let s:remove = ' '
-        endif
-    endif
+    let s:remove = !exists('g:roku_remove_old') || g:roku_remove_old ? ' --remove-old ' : ' '
 
     echoh Normal | echom 'packaging channel'
     let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . s:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
