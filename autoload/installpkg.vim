@@ -14,7 +14,7 @@ func! installpkg#RokuInstall(...)
 
     let s:roku_ip = a:0 > 0 ? a:1 : g:roku_ip
 
-    echom 'compressing channel & uploading to roku (' . s:roku_ip . ')'
+    echoh Normal | echom 'compressing channel & uploading to roku (' . s:roku_ip . ')'
     let s:result = split(system(s:path . 'install "' . bufname('%') . '" -u ' . g:roku_username . ':' . g:roku_password .
                 \ ' -d ' . s:roku_ip), '\n')
     echom join(s:result)
@@ -47,7 +47,7 @@ func! installpkg#RokuPackage(...)
         endif
     endif
 
-    echom 'packaging channel'
+    echoh Normal | echom 'packaging channel'
     let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . s:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
     echom join(s:result)
 endfunc
