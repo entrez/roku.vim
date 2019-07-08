@@ -1,0 +1,117 @@
+*roku.txt* Tools for Roku app development
+
+                  d8b                                   d8,                 ~
+                  ?88                                  `8P                  ~
+                   88b                                                      ~
+  88bd88b d8888b   888  d88'?88   d8P        ?88   d8P  88b  88bd8b,d88b    ~
+  88P'  `d8P' ?88  888bd8P' d88   88         d88  d8P'  88P  88P'`?8P'?8b   ~
+ d88     88b  d88 d88888b   ?8(  d88   d8b   ?8b ,88'  d88  d88  d88  88P   ~
+d88'     `?8888P'd88' `?88b,`?88P'?8b  ?8P   `?888P'  d88' d88' d88'  88b   ~
+
+author: entrez <https://github.com/entrez>
+
+=============================================================================
+CONTENTS                                               *roku.vim,roku-contents*
+
+    1. usage ........................ |roku-usage|
+    2. configuration ................ |roku-config|
+    3. commands & mappings .......... |roku-commands|
+    4. contributing ................. |roku-contrib|
+    5. changelog .................... |roku-changelog|
+
+=============================================================================
+USAGE                                                              *roku-usage*
+
+roku.vim provides functionality for development of Roku channels, both by
+providing support for the Brightscript language (syntax highlighting, folding,
+section movement, etc) and more general support for communicating with Roku
+devices (installation, packaging).
+
+=============================================================================
+CONFIGURATION                                                     *roku-config*
+
+the language support shouldn't require much configuration, but to enable the
+various features related to communicating with your roku device support, a
+number of variables may be and/or should be defined.
+
+-----------------------------------------------------------------------------
+g:roku_ip                                                           *g:roku_ip*
+
+this can be set to the hostname or ip address of the device which is to be
+used by default, and is used when one of the |RokuInstall| or |RokuPackage|
+commands is called without specifying a device. if not set, either command
+may still be used by specifying the ip or hostname as the first (and only)
+argument - see |RokuInstall| and |RokuPackage| for more detail.
+
+-----------------------------------------------------------------------------
+g:roku_pkg_pass                                               *g:roku_pkg_pass*
+
+this must be set to your device's packaging password to enable packaging your
+channel from within vim.
+
+-----------------------------------------------------------------------------
+g:roku_username                                               *g:roku_username*
+
+this must be set to the username used to log into the device (this is set to
+`rokudev' by default during the initial configuration of your Roku device for
+development).
+
+-----------------------------------------------------------------------------
+g:roku_password                                               *g:roku_password*
+
+this must be set to the password used to log into the device over http; this
+password is also set during initial configuration of your device as a dev
+unit.
+
+=============================================================================
+COMMANDS & MAPPINGS                                             *roku-commands*
+
+the typical section-based movement accessed via the ]], [[, [], and ][ key
+mappings has been modified to move between function definitions when editing
+a brightscript file - unless otherwise assigned, ]] and [[ move forward and
+back, respectively, between the start of each function definition, while ][
+and [] do the same between the ends of function declarations.
+
+roku.vim provides two commands for installation and packaging your channel,
+as well as keybindings for using each one with your default roku device (see
+|g:roku_ip|).
+
+by default, |RokuInstall| is accessed with <leader>; and |RokuPackage| is
+accessed with <leader>' - these mappings, again, will install and package
+to/from the default device set in |g:roku_ip|, while the commands themselves
+offer more flexibility & enable communicating with multiple devices.
+
+-----------------------------------------------------------------------------
+RokuInstall                                                       *RokuInstall*
+
+usage: RokuInstall [IP/HOSTNAME]
+default mapping: <leader>;
+
+install the current roku project/channel to the device specified - if no ip
+or hostname is included when calling the function, the value of |g:roku_ip|
+is used by default.
+
+-----------------------------------------------------------------------------
+RokuPackage                                                       *RokuPackage*
+
+usage: RokuPackage [IP/HOSTNAME]
+default mapping: <leader>'
+
+package the current sideloaded channel on the device in question - if called
+from an identifiable roku project, the resulting .pkg file will be saved in
+an out/ directory in the main project folder. otherwise, the .pkg file will
+be saved in the current directory.
+
+as with |RokuInstall|, if no ip or hostname is specified |g:roku_ip| will be
+used by default.
+
+=============================================================================
+CONTRIBUTING                                                     *roku-contrib*
+
+if you find a bug or would like to contribute code or ideas to roku.vim, feel
+free to submit a PR, an issue, etc, at <https://github.com/entrez/roku.vim>.
+
+=============================================================================
+CHANGELOG                                                      *roku-changelog*
+
+version 0.9.0 - Initial public release (2019/07/08)
