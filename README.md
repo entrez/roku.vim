@@ -10,18 +10,18 @@ a vim plugin for roku development - provides brightscript language support (synt
 
 #### Vundle
 add this line to your .vimrc:
-```
+```vim
 Plugin 'entrez/roku.vim'
 ```
 then run the following in vim:
-```
+```vim
 :source %
 :PluginInstall
 ```
 
 #### VimPlug
 add this line to your .vimrc:
-```
+```vim
 Plug 'entrez/roku.vim'
 ```
 then run the following in vim:
