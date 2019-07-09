@@ -63,6 +63,12 @@ this must be set to the password used to log into the device over http; this
 password is also set during initial configuration of your device as a dev
 unit.
 
+-----------------------------------------------------------------------------
+g:roku_remove_old                                           *g:roku_remove_old*
+
+if not set, or set to 1, |RokuPackage| will overwrite old .pkg files - if set
+to 0, old .pkg files will be kept alongside the new ones.
+
 =============================================================================
 COMMANDS & MAPPINGS                                             *roku-commands*
 
@@ -101,6 +107,10 @@ package the current sideloaded channel on the device in question - if called
 from an identifiable roku project, the resulting .pkg file will be saved in
 an out/ directory in the main project folder. otherwise, the .pkg file will
 be saved in the current directory.
+
+if |g:roku_remove_old| is set to 0, old .pkg files in the output directory
+will be kept - otherwise, any existing package files will be overwritten/
+removed when the new .pkg file is retrieved from the device.
 
 as with |RokuInstall|, if no ip or hostname is specified |g:roku_ip| will be
 used by default.
