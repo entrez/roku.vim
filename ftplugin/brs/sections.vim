@@ -12,7 +12,8 @@ func! s:GoToDefinition()
     let varname = expand('<cword>') 
     exec 'sil! norm! ?\c\(^\(function\|sub\) ' . varname . '(\|\<' . 
                 \ varname . '\s*=\s*createObject(\|' . 
-                \ 'let ' . varname . '\s*=*\)' . "\r"
+                \ 'let ' . varname . '\s*=*\|[A-z.]*\.addField("' .
+                \ varname . '",\)' . "\r"
 endfunc
 
 noremap <script> <buffer> <silent> ]] :cal <SID>GoToFunction(0,0,0)<cr>
