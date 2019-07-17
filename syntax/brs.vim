@@ -46,6 +46,7 @@ syn match brsLoop "\v\c^\s*next>"
 syn keyword brsFunctDef
     \ sub
     \ function
+syn match brsFunctDef "\v\c<(sub|function)>.*" contains=brsFunct
 syn match brsFunctDef "\v\c<end ?sub>"
 syn match brsFunctDef "\v\c<end function>"
 " }}}
@@ -142,7 +143,8 @@ syn match brsType "\v\c<(int|str)>\(\@1!"
 " }}}
 
 " strings
-syn region brsString start=/"/ end=/"/ oneline 
+syn region brsString start=/"/ end=/"/ contains=brsSubStr oneline 
+syn match brsSubStr '\v\c\{[0-9]+\}' contained
 
 " roku component classes {{{
 syn match brsComponents '\v\c("?)roAppInfo\1' 
@@ -368,11 +370,12 @@ hi default link brsComment Comment
 hi default link brsTodos Todo
 " strings
 hi default link brsString String
+hi default link brsSubStr Special
 " console output
 hi default link brsOut Debug
 " include
 hi default link brsLib Include
-" function declaration
+" functions
 hi default link brsFunct Function
 " operators & delimiters
 hi default link brsOp Operator
