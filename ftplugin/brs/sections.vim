@@ -8,9 +8,9 @@ func! s:GoToFunction(gotoend, backwards, visual)
     exec 'sil norm! ' . dir . pattern . "\r"
 endfunc
 
-func! GoToDefinition()
+func! s:GoToDefinition()
     let varname = expand('<cword>') 
-    exec 'sil! norm! ?\c\(^\(function\|sub\) ' . varname . '(\|' . 
+    exec 'sil! norm! ?\c\(^\(function\|sub\) ' . varname . '(\|\<' . 
                 \ varname . '\s*=\s*createObject(\|' . 
                 \ 'let ' . varname . '\s*=*\)' . "\r"
 endfunc
@@ -25,3 +25,4 @@ vnoremap <script> <buffer> <silent> [[ :<c-u>cal <SID>GoToFunction(0,1,1)<cr>
 vnoremap <script> <buffer> <silent> ][ :<c-u>cal <SID>GoToFunction(1,0,1)<cr>
 vnoremap <script> <buffer> <silent> [] :<c-u>cal <SID>GoToFunction(1,1,1)<cr>
 
+com! -nargs=0 -buffer RokuGoToDef :cal <SID>GoToDefinition()
