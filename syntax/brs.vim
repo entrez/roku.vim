@@ -2,7 +2,7 @@
 syn case ignore
 syn iskeyword @,48-57,192-255,$,%,#,!,&
 
-syn match brsIdentifier "\w*"
+syn match brsIdentifier '\v\c<[A-ZA-z_]+[$%!#]?>'
 
 " function calls
 syn region functContent matchgroup=brsFunct start="\v\.?<\w+\(" end="\v\)" contains=ALL
