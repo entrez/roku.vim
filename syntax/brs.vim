@@ -2,8 +2,11 @@
 syn case ignore
 syn iskeyword @,48-57,192-255,$,%,#,!,&
 
+syn match brsIdentifier "\w*"
+
 " function calls
 syn region functContent matchgroup=brsFunct start="\v\.?<\w+\(" end="\v\)" contains=ALL
+syn region functCon matchgroup=brsReserved start="\v\c\.?<decodeUriComponent\(" end="\v\)" contains=ALL
 
 " constants {{{
 syn keyword brsConstants
@@ -64,6 +67,7 @@ syn keyword brsReserved
     \ goto
     \ run
     \ dim
+    \ m
 " }}}
 
 " conditional compilation
@@ -124,7 +128,7 @@ syn match brsOut "\v^\s*\zs(\?|print\s+)" contains=ALL
 " comments {{{
 syn match brsComment "\v'.*$" contains=brsTodos
 syn match brsComment "\v\c<rem .*$" contains=brsTodos
-syn match brsTodos "\v\c'\s*\zs<(TODO|NB|FIXME|NOTE|FYI|BUG)>.*$" contained
+syn match brsTodos "\v\c'\s*\zs<(TODO|NB|FIXME|NOTE|FYI|BUG|XXX)>$" contained
 " }}}
 
 " variable types {{{
@@ -371,7 +375,7 @@ hi default link brsComment Comment
 hi default link brsTodos Todo
 " strings
 hi default link brsString String
-hi default link brsSubStr Special
+hi default link brsSubStr SpecialChar
 " console output
 hi default link brsOut Debug
 " include
@@ -391,14 +395,14 @@ hi default link brsError Exception
 " reserved
 hi default link brsReserved Special
 " roku components & interfaces 
-hi default link brsInterfaces Identifier
+hi default link brsInterfaces Structure
 hi default link brsComponents brsInterfaces
 " types
 hi default link brsType Underlined
 " flow control operations
 hi default link brsCondit Conditional
 hi default link brsLoop Repeat
-hi default link brsFunctDef Structure
+hi default link brsFunctDef Label
 " }}}
 
 " vim:et:sw=4:ts=4:fdm=marker:
