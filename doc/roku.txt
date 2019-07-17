@@ -78,14 +78,28 @@ a brightscript file - unless otherwise assigned, ]] and [[ move forward and
 back, respectively, between the start of each function definition, while ][
 and [] do the same between the ends of function declarations.
 
-roku.vim provides two commands for installation and packaging your channel,
-as well as keybindings for using each one with your default roku device (see
-|g:roku_ip|).
+the command |RokuLookForDef| launches a basic search for an initial, explicit
+definition/declaration of the symbol currently under the cursor.
+
+additionally, roku.vim provides two commands for installation and packaging
+your channel, as well as keybindings for using each one with your default
+roku device (see |g:roku_ip|).
 
 by default, |RokuInstall| is accessed with <leader>; and |RokuPackage| is
 accessed with <leader>' - these mappings, again, will install and package
 to/from the default device set in |g:roku_ip|, while the commands themselves
 offer more flexibility & enable communicating with multiple devices.
+
+-----------------------------------------------------------------------------
+RokuLookForDef                                                 *RokuLookForDef*
+
+usage: RokuLookForDef
+default mapping: none
+
+search for an explicit declaration/definition of the symbol under the cursor.
+possible matches include function (or sub) definitions, uses of createObject,
+declarations of the form let foo = bar, and field declarations which use the
+addField("foo") function.
 
 -----------------------------------------------------------------------------
 RokuInstall                                                       *RokuInstall*
