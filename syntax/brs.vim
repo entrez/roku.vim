@@ -68,7 +68,8 @@ syn keyword brsReserved
 
 " conditional compilation
 syn match brsCondComp "\v\c^\s*\zs#(else( if)?|(end )?if|error)"
-
+syn match brsCondCompDef "\v\c^\s*\zs#const"
+syn match brsError "\v\c^\s*\zs#error"
 " library import
 syn keyword brsLib library
  
@@ -385,6 +386,8 @@ hi default link brsConstants Constant
 hi default link brsBool Boolean
 " conditional compilation
 hi default link brsCondComp PreCondit
+hi default link brsCondCompDef Define
+hi default link brsError Exception
 " reserved
 hi default link brsReserved Special
 " roku components & interfaces 
