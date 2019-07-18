@@ -1,10 +1,7 @@
-setlocal commentstring='\ %s
-setlocal comments=n:',n:rem
-setlocal iskeyword+=$,%,#,!,&
-setlocal tabstop=2
-setlocal softtabstop=2
-setlocal shiftwidth=2
-setlocal formatoptions=tcrql
-setlocal completefunc=syntaxcomplete#Complete
+setl cms='\ %s com=n:',n:rem
+setl isk+=$,%,#,!,&
+setl sts=2 sw=2 ts=2
+setl fo=tcrql
+setl cfu=syntaxcomplete#Complete
 
 " vim:et:sw=4:ts=4
