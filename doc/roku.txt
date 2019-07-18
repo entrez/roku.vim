@@ -138,4 +138,5 @@ free to submit a PR, an issue, etc, at <https://github.com/entrez/roku.vim>.
 =============================================================================
 CHANGELOG                                                      *roku-changelog*
 
+version 0.9.1 - Adds RokuGoToDef & refines some syntax highlighting (2019/07/18)
 version 0.9.0 - Initial public release (2019/07/08)
