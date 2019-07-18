@@ -4,6 +4,8 @@ syn iskeyword @,48-57,192-255,$,%,#,!,&
 
 syn match brsIdentifier '\v\c<[A-Za-z_]+[$%!#]?>'
 
+syn match brsOp "\v[A-Za-z_$%!#]@<=\.[A-Za-z_]@="
+
 " function calls
 syn region functContent matchgroup=brsFunct start="\v\.?<\w+\(" end="\v\)" contains=ALL
 
