@@ -78,7 +78,7 @@ a brightscript file - unless otherwise assigned, ]] and [[ move forward and
 back, respectively, between the start of each function definition, while ][
 and [] do the same between the ends of function declarations.
 
-the command |RokuLookForDef| launches a basic search for an initial, explicit
+the command |RokuGoToDef| launches a basic search for an initial, explicit
 definition/declaration of the symbol currently under the cursor.
 
 additionally, roku.vim provides two commands for installation and packaging
@@ -91,9 +91,9 @@ to/from the default device set in |g:roku_ip|, while the commands themselves
 offer more flexibility & enable communicating with multiple devices.
 
 -----------------------------------------------------------------------------
-RokuLookForDef                                                 *RokuLookForDef*
+RokuGoToDef                                                       *RokuGoToDef*
 
-usage: RokuLookForDef
+usage: RokuGoToDef
 default mapping: none
 
 search for an explicit declaration/definition of the symbol under the cursor.
