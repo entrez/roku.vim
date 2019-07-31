@@ -134,7 +134,15 @@ syn match brsOut "\v^\s*\zs(\?|print\s+)" contains=ALL
 " comments {{{
 syn match brsComment "\v'.*$" contains=brsTodo
 syn match brsComment "\v\c<rem .*$" contains=brsTodo
-syn match brsTodo "\v\c'\s*\zs<(TODO|NB|FIXME|NOTE|FYI|BUG|XXX)>$" contained
+syn keyword brsTodo 
+            \ TODO
+            \ NB
+            \ FIXME
+            \ NOTE
+            \ FYI
+            \ BUG
+            \ XXX
+            \ contained
 " }}}
 
 " variable types {{{
