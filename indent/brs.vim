@@ -8,7 +8,6 @@ setl nocindent
 setl autoindent
 setl indentkeys=0{,0},0[,0],e,o,O,!^F,=~end,=~else,=~next,=~#end,=~#else
 setl indentexpr=BrsIndent(v:lnum)
-"setl foldmethod=indent
 
 if exists("*BrsIndent")
     finish
@@ -18,6 +17,7 @@ let s:cpo_save = &cpo
 set cpo&vim
 
 func! BrsIndent(lnum) abort
+    let indent_condcomp = exists("g:roku_indent_condcomp")?g:roku_indent_condcomp:0
     let plnum = prevnonblank(a:lnum-1)
     if plnum == 0
         return 0
@@ -29,17 +29,18 @@ func! BrsIndent(lnum) abort
 
     let ind = pind
 
-    if pline =~ '\c^\s*\(function\|sub\)\> \i\+(.*)\( as [A-z]\+\)\?'
+    if pline =~? '\v^\s*(function|sub)> \i+\(.*\)( as [A-z]+)?'
         let ind += shiftwidth()
-    elseif pline =~ '\c^\s*for \(\S\+ = \S\+ to \S\+\( step \S\+\)\?\)\|\(each \S\+ in \(\S\+\|"[^"]*"\|\[.*\]\|{.*}\)\+\)'
+    elseif pline =~? '\v^\s*for (\S+ \= \S+ to \S+( step \S+)?)|(each \S+ in (\S+|"[^"]*"|\[.*\]|\{.*\})+)'
         let ind += shiftwidth()
-    elseif pline =~ '\c^\s*\(else \)\?\(if\|while\) \?\(not \)\?\(\S\+\|"[^"]*"\)\+\(\s*\([-+*/^><=]\{1,2}\|and\|or\)\s*\(not \)\?\(\S\+\|"[^"]*"\)\)*\(then\)\?\s*$'
-        " indent lines after `if' statements only if it's not a one-line `if'
+    elseif pline =~? '\v^\s*(else )?(if|while) ?(not )?(\S+|"[^"]*")+' . 
+                \ '(\s*([-+*/^><=]{1,2}|and|or)\s*(not )?(\S+|"[^"]*"))*( then)?\s*$'
+        " indent lines after `if' statements, but only if it's not a one-line `if'
         let ind += shiftwidth()
-    elseif pline =~ '\c^\s*\#\(else\( if\)\?\|if\)\>.*'
+    elseif indent_condcomp && pline =~? '\v^\s*#(else( if)?|if)>.*'
         " indent lines in conditional compilation if statements
         let ind += shiftwidth()
-    elseif pline =~ '\c^\s*\<else\>\s*$'
+    elseif pline =~? '\v^\s*<else>\s*$'
         let ind += shiftwidth()
     endif
 
@@ -50,11 +51,8 @@ func! BrsIndent(lnum) abort
         let ind -= shiftwidth()
     endif
 
-    if line =~ '\c^\s*#\?end\>'
-        let ind -= shiftwidth()
-    elseif line =~ '\c^\s*\<next\>'
-        let ind -= shiftwidth()
-    elseif line =~ '\c^\s*#\?else\>'
+    if line =~? '\v^\s*(end|next|else)>' ||
+                \ (indent_condcomp && line =~? '\v^\s*#(end|else)')
         let ind -= shiftwidth()
     endif
 
