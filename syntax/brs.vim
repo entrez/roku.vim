@@ -117,15 +117,15 @@ syn match brsOp "\v\}"
 " }}}
 
 " numbers {{{
-syn match brsHex "\v\c<&H\x+>"
-syn match brsInteger "\v<\d+\.?>"
-syn match brsLong "\v<\d+&>"
-syn match brsFloat "\v<\d+(\.\d+)?e(\+|-)?\d+(\.\d+)?!?>"
-syn match brsFloat "\v<(\d+!|(\d+)?\.\d+!?)>"
-syn match brsDouble "\v<(\d|(\..*)@<!\.(.*\.)@!){11,}>"
-syn match brsDouble "\v<\d{10,}#?>"
-syn match brsDouble "\v<\d+(\.\d+)?d((\+|-)\d+(\.\d+)?)?#?>"
-syn match brsDouble "\v<\d+(\.\d+)?#>"
+syn match brsHex '\v\c<\&h\x+>'
+syn match brsInteger '\v<\d+\.?>'
+syn match brsLong '\v<\d+\&>'
+syn match brsFloat '\v\c<\d+(\.\d+)?e(\+|-)?\d+(\.\d+)?!?>'
+syn match brsFloat '\v<(\d+!|(\d+)?\.\d+!?)>'
+syn match brsDouble '\v<(\d|(\..*)@<!\.(.*\.)@!){11,}>'
+syn match brsDouble '\v<\d{10,}#?>'
+syn match brsDouble '\v<\d+(\.\d+)?d((\+|-)\d+(\.\d+)?)?#?>'
+syn match brsDouble '\v<\d+(\.\d+)?#>'
 " }}}
 
 " debug output
