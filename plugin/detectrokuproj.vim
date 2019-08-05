@@ -6,27 +6,26 @@ augroup END
 fun! s:RokuCheck()
     if glob(fnamemodify(bufname('%'), ':p:h')) != ''
         if glob(fnamemodify(bufname('%'), ':p:h') . '/source/*.brs') != '' || glob(fnamemodify(bufname('%'), ':p:h') . '/*.brs') != ''
-            com! -nargs=* -buffer RokuInstall :call installpkg#RokuInstall(<f-args>)
-            com! -nargs=* -buffer RokuPackage :call installpkg#RokuPackage(<f-args>)
-            com! -nargs=1 -buffer RokuRemote :call communicate#RokuRemote(<q-args>)
-            com! -nargs=1 -buffer RokuMsg :call communicate#RokuMessage(<q-args>)
-            nnoremap <buffer> <leader>; :RokuInstall<cr>
-            nnoremap <buffer> <leader>' :RokuPackage<cr>
+            call s:RokuFileSetup()
         else
-            let s:steps = ':p:h:h'
-            while glob(fnamemodify(bufname('%'), s:steps) . '/*') != glob('//*') && glob(fnamemodify(bufname('%'), s:steps) . '/manifest') == ''
-                let s:steps .= ':h'
+            let steps = ':p:h:h'
+            while glob(fnamemodify(bufname('%'), steps) . '/*') != glob('//*') && glob(fnamemodify(bufname('%'), steps) . '/manifest') == ''
+                let steps .= ':h'
             endwhile
 
-            if glob(fnamemodify(bufname('%'), s:steps) . '/source/*.brs') != '' &&
-                        \ glob(fnamemodify(bufname('%'), s:steps) . '/manifest') != ''
-                com! -nargs=* -buffer RokuInstall :call installpkg#RokuInstall(<f-args>)
-                com! -nargs=* -buffer RokuPackage :call installpkg#RokuPackage(<f-args>)
-                com! -nargs=1 -buffer RokuRemote :call communicate#RokuRemote(<q-args>)
-                com! -nargs=1 -buffer RokuMsg :call communicate#RokuMessage(<q-args>)
-                nnoremap <buffer> <leader>; :RokuInstall<cr>
-                nnoremap <buffer> <leader>' :RokuPackage<cr>
+            if glob(fnamemodify(bufname('%'), steps) . '/source/*.brs') != '' &&
+                        \ glob(fnamemodify(bufname('%'), steps) . '/manifest') != ''
+                call s:RokuFileSetup()
             endif 
         endif
     endif
+endfun
+
+fun! s:RokuFileSetup()
+    com! -nargs=* -buffer RokuInstall :call installpkg#RokuInstall(<f-args>)
+    com! -nargs=* -buffer RokuPackage :call installpkg#RokuPackage(<f-args>)
+    com! -nargs=1 -buffer RokuRemote :call communicate#RokuRemote(<q-args>)
+    com! -nargs=1 -buffer RokuMsg :call communicate#RokuMessage(<q-args>)
+    nnoremap <buffer> <leader>; :RokuInstall<cr>
+    nnoremap <buffer> <leader>' :RokuPackage<cr>
 endfun
