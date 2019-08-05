@@ -37,11 +37,18 @@ number of variables may be and/or should be defined.
 -----------------------------------------------------------------------------
 g:roku_ip                                                           *g:roku_ip*
 
-this can be set to the hostname or ip address of the device which is to be
-used by default, and is used when one of the |RokuInstall| or |RokuPackage|
-commands is called without specifying a device. if not set, either command
-may still be used by specifying the ip or hostname as the first (and only)
-argument - see |RokuInstall| and |RokuPackage| for more detail.
+this can be set to the hostname or ip address of the device(s) to be used by
+default, and is used when one of the |RokuInstall| or |RokuPackage| commands
+is called without specifying a device. if not set, either command may still
+be used by specifying any number of ips or hostnames as its only arguments -
+see |RokuInstall| and |RokuPackage| for more detail.
+
+to use a single device by default for installation & packaging, set g:roku_ip
+like so:
+    let g:roku_ip = '120.0.0.1'
+
+to deploy to multiple devices by default instead:
+    let g:roku_ip = ['120.0.0.1', '120.0.0.2', '120.0.0.3']
 
 -----------------------------------------------------------------------------
 g:roku_pkg_pass                                               *g:roku_pkg_pass*
@@ -111,17 +118,17 @@ addField("foo") function.
 -----------------------------------------------------------------------------
 RokuInstall                                                       *RokuInstall*
 
-usage: RokuInstall [IP/HOSTNAME]
+usage: RokuInstall [IP/HOSTNAME ...]
 default mapping: <leader>;
 
-install the current roku project/channel to the device specified - if no ip
-or hostname is included when calling the function, the value of |g:roku_ip|
+install the current roku project/channel to the device(s) specified - if no
+ip or hostname is included when calling the function, the value of |g:roku_ip|
 is used by default.
 
 -----------------------------------------------------------------------------
 RokuPackage                                                       *RokuPackage*
 
-usage: RokuPackage [IP/HOSTNAME]
+usage: RokuPackage [IP/HOSTNAME ...]
 default mapping: <leader>'
 
 package the current sideloaded channel on the device in question - if called
@@ -130,8 +137,10 @@ an out/ directory in the main project folder. otherwise, the .pkg file will
 be saved in the current directory.
 
 if |g:roku_remove_old| is set to 0, old .pkg files in the output directory
-will be kept - otherwise, any existing package files will be overwritten/
-removed when the new .pkg file is retrieved from the device.
+will be kept, and packages will be retrieved from all the specified devices;
+otherwise, any existing package files will be overwritten/removed when the
+new .pkg file is retrieved from the device, and only the first device named
+will be used.
 
 as with |RokuInstall|, if no ip or hostname is specified |g:roku_ip| will be
 used by default.

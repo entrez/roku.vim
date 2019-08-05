@@ -12,12 +12,15 @@ func! installpkg#RokuInstall(...)
         return
     endif
 
-    let s:roku_ip = a:0 > 0 ? a:1 : g:roku_ip
+    let target_devices = a:0 > 0 ? a:000 : type(g:roku_ip) == 3 ? g:roku_ip : [ g:roku_ip ]
 
-    echoh Normal | echom 'compressing channel & uploading to roku (' . s:roku_ip . ')'
-    let s:result = split(system(s:path . 'install "' . bufname('%') . '" -u ' . g:roku_username . ':' . g:roku_password .
-                \ ' -d ' . s:roku_ip), '\n')
-    echom join(s:result)
+    for roku_ip in target_devices
+        echoh Normal | echom 'compressing channel & uploading to roku (' . roku_ip . ')'
+        let result = split(system(s:path . 'install "' . bufname('%') . 
+                    \ '" -u ' . g:roku_username . ':' . g:roku_password .
+                    \ ' -d ' . roku_ip), '\n')
+        echom join(result)
+    endfor
 endfunc
 
 func! installpkg#RokuPackage(...)
@@ -35,10 +38,16 @@ func! installpkg#RokuPackage(...)
         return
     endif
 
-    let s:roku_ip = a:0 > 0 ? a:1 : g:roku_ip
-    let s:remove = !exists('g:roku_remove_old') || g:roku_remove_old ? ' --remove-old ' : ' '
+    let target_devices = a:0 > 0 ? a:000 : type(g:roku_ip) == 3 ? g:roku_ip : [ g:roku_ip ]
+    let remove = !exists('g:roku_remove_old') || g:roku_remove_old ? ' --remove-old ' : ' '
+    let target_devices = remove == ' ' ? target_devices : target_devices[:0]
 
-    echoh Normal | echom 'packaging channel'
-    let s:result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 'package' . s:remove . s:roku_ip . ' -u ' . g:roku_username . ':' . g:roku_password . ' -p ' . g:roku_pkg_pass))
-    echom join(s:result)
+    for roku_ip in target_devices
+        echoh Normal | echom 'packaging channel'
+        let result = split(system('cd "' . fnamemodify(bufname("%"), ':p:h') . '" && ' . s:path . 
+                    \ 'package' . remove . roku_ip . 
+                    \ ' -u ' . g:roku_username . ':' . g:roku_password . 
+                    \ ' -p ' . g:roku_pkg_pass))
+        echom join(result)
+    endfor
 endfunc

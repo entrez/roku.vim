@@ -94,22 +94,6 @@ if [ $? -eq 0 ]; then
     if ! curl -d '' "${ROKU_IP}:8060/keypress/home" &>/dev/null; then
         echo "no connection to roku (${ROKU_IP})"
         exit 1
-    else
-        case "${ROKU_IP}" in
-            10.192.7.104) # rokuexpress
-                # alternate format: curl -d '' '10.192.24.45:8060/keypress/InputHDMI1'
-                [[ "$(curl -s '10.192.24.45:8060/query/active-app' &2>/dev/null)" =~ '<app id="tvinput.hdmi1"' ]] || \
-                    (curl -d '' '10.192.24.45:8060/launch/tvinput.hdmi1' &>/dev/null; echo 'switching to input 1' >&2)
-                ;;
-            10.192.24.241) # roku3
-                [[ "$(curl -s '10.192.24.45:8060/query/active-app' &2>/dev/null)" =~ '<app id="tvinput.hdmi2"' ]] || \
-                    (curl -d '' '10.192.24.45:8060/launch/tvinput.hdmi2' &>/dev/null; echo 'switching to input 2' >&2)
-                ;;
-            10.192.7.93) # rokustick 
-                [[ "$(curl -s '10.192.24.45:8060/query/active-app' &2>/dev/null)" =~ '<app id="tvinput.hdmi3"' ]] || \
-                    (curl -d '' '10.192.24.45:8060/launch/tvinput.hdmi3' &>/dev/null; echo 'switching to input 3' >&2)
-                ;;
-        esac
     fi
 
     resp=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "${ROKU_IP}/plugin_install" \
