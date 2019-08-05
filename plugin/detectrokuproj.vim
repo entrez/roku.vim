@@ -1,6 +1,6 @@
 augroup roku_project_detect
     au!
-    au BufNewFile,BufRead manifest,translations.ts,*.brs,*.xml call s:RokuCheck() 
+    au bufnewfile,bufread manifest,translations.ts,*.brs,*.xml call s:RokuCheck() 
 augroup END
 
 fun! s:RokuCheck()
@@ -8,6 +8,8 @@ fun! s:RokuCheck()
         if glob(fnamemodify(bufname('%'), ':p:h') . '/source/*.brs') != '' || glob(fnamemodify(bufname('%'), ':p:h') . '/*.brs') != ''
             com! -nargs=* -buffer RokuInstall :call installpkg#RokuInstall(<f-args>)
             com! -nargs=* -buffer RokuPackage :call installpkg#RokuPackage(<f-args>)
+            com! -nargs=1 -buffer RokuRemote :call communicate#RokuRemote(<q-args>)
+            com! -nargs=1 -buffer RokuMsg :call communicate#RokuMessage(<q-args>)
             nnoremap <buffer> <leader>; :RokuInstall<cr>
             nnoremap <buffer> <leader>' :RokuPackage<cr>
         else
@@ -20,6 +22,8 @@ fun! s:RokuCheck()
                         \ glob(fnamemodify(bufname('%'), s:steps) . '/manifest') != ''
                 com! -nargs=* -buffer RokuInstall :call installpkg#RokuInstall(<f-args>)
                 com! -nargs=* -buffer RokuPackage :call installpkg#RokuPackage(<f-args>)
+                com! -nargs=1 -buffer RokuRemote :call communicate#RokuRemote(<q-args>)
+                com! -nargs=1 -buffer RokuMsg :call communicate#RokuMessage(<q-args>)
                 nnoremap <buffer> <leader>; :RokuInstall<cr>
                 nnoremap <buffer> <leader>' :RokuPackage<cr>
             endif 
