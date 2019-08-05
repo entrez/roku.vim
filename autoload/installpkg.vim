@@ -12,7 +12,7 @@ func! installpkg#RokuInstall(...)
         return
     endif
 
-    let target_devices = a:0 > 0 ? a:000 : [ g:roku_ip ]
+    let target_devices = a:0 > 0 ? a:000 : type(g:roku_ip) == 3 ? g:roku_ip : [ g:roku_ip ]
 
     for roku_ip in target_devices
         echoh Normal | echom 'compressing channel & uploading to roku (' . roku_ip . ')'
@@ -38,7 +38,7 @@ func! installpkg#RokuPackage(...)
         return
     endif
 
-    let target_devices = a:0 > 0 ? a:000 : [ g:roku_ip ]
+    let target_devices = a:0 > 0 ? a:000 : type(g:roku_ip) == 3 ? g:roku_ip : [ g:roku_ip ]
     let remove = !exists('g:roku_remove_old') || g:roku_remove_old ? ' --remove-old ' : ' '
 
     for roku_ip in target_devices
