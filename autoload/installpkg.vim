@@ -40,6 +40,7 @@ func! installpkg#RokuPackage(...)
 
     let target_devices = a:0 > 0 ? a:000 : type(g:roku_ip) == 3 ? g:roku_ip : [ g:roku_ip ]
     let remove = !exists('g:roku_remove_old') || g:roku_remove_old ? ' --remove-old ' : ' '
+    let target_devices = remove == ' ' ? target_devices : target_devices[:0]
 
     for roku_ip in target_devices
         echoh Normal | echom 'packaging channel'
