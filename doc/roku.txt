@@ -98,7 +98,7 @@ example, this ensures mappings are never set for commands when they aren't
 available & would cause an error.
 
 the format used should be a dictionary where remote button names (see list:
-|RokuKeynames|) are associated with their desired mappings, e.g.:
+|roku-keynames|) are associated with their desired mappings, e.g.:
 
         let g:roku_remote_keys = {
             \ 'home': '<m-home>',
@@ -131,7 +131,7 @@ to/from the default device set in |g:roku_ip|, while the commands themselves
 offer more flexibility & enable communicating with multiple devices.
 
 -----------------------------------------------------------------------------
-RokuGoToDef                                                       *RokuGoToDef*
+RokuGoToDef                                          *:RokuGoToDef* *RokuGoToDef*
 
 usage: RokuGoToDef
 default mapping: none
@@ -142,7 +142,7 @@ declarations of the form let foo = bar, and field declarations which use the
 addField("foo") function.
 
 -----------------------------------------------------------------------------
-RokuInstall                                                       *RokuInstall*
+RokuInstall                                          *:RokuInstall* *RokuInstall*
 
 usage: RokuInstall [IP/HOSTNAME ...]
 default mapping: <leader>;
@@ -152,7 +152,7 @@ ip or hostname is included when calling the function, the value of |g:roku_ip|
 is used by default.
 
 -----------------------------------------------------------------------------
-RokuPackage                                                       *RokuPackage*
+RokuPackage                                          *:RokuPackage* *RokuPackage*
 
 usage: RokuPackage [IP/HOSTNAME ...]
 default mapping: <leader>'
@@ -172,7 +172,7 @@ as with |RokuInstall|, if no ip or hostname is specified |g:roku_ip| will be
 used by default.
 
 -----------------------------------------------------------------------------
-RokuMsg                                                               *RokuMsg*
+RokuMsg                                                      *:RokuMsg* *RokuMsg*
 
 usage: RokuMsg <TEXT>
 default mapping: none
@@ -181,50 +181,50 @@ send a string of text to the default device indicated by |g:roku_ip|, useful
 for things like search input, etc.
 
 -----------------------------------------------------------------------------
-RokuRemote                                                         *RokuRemote*
+RokuRemote                                             *:RokuRemote* *RokuRemote*
 
-usage: RokuMsg <KEY>
+usage: Remote <KEY>
 default mapping: see |g:roku_remote_keys|
 
 simulate a keypress on the default device indicated by |g:roku_ip| via roku's
 ecp framework - this allows for direct interaction with your device without
 leaving the editor.
 
-                                                                 *RokuKeynames*
+                                                                *roku-keynames*
 the device will respond only to certain valid key names, listed below. some
 keys are non-standard - only supported by certain devices with advanced
 functionality, e.g. roku tvs - and are marked with an asterisk (*):
 
-            key name        description
-            --------        -----------
-            home            home button
-            rev             rewind button
-            fwd             fast-forward button
-            play            play/pause button
-            select          OK button
-            left            left arrow
-            right           right arrow
-            up              up arrow
-            down            down arrow
-            back            back button
-            instantreplay   instant replay/jump back button
-            info            options/* button
-            backspace       used in text input fields
-            search          submit search query
-            enter           submit input
-            findremote      activate `find my remote' feature*
-            volumedown      volume down button*
-            volumeup        volume up button*
-            volumemute      mute button*
-            poweroff        turn off device*
-            channelup       move up a channel (in tv tuner)*
-            channeldown     move down a channel (in tv tuner)*
-            inputtuner      switch to tv tuner*
-            inputhdmi1      change input to to hdmi1*
-            inputhdmi2      switch to hdmi2*
-            inputhdmi3      switch to hdmi3*
-            inputhdmi4      switch to hdmi4*
-            inputav1        switch to av1*
+key name                          description
+
+home                              home button
+rev                               rewind button
+fwd                               fast-forward button
+play                              play/pause button
+select                            OK button
+left                              left arrow
+right                             right arrow
+up                                up arrow
+down                              down arrow
+back                              back button
+instantreplay                     instant replay/jump back button
+info                              options/* button
+backspace                         used in text input fields
+search                            submit search query
+enter                             submit input
+findremote                        activate `find my remote' feature*
+volumedown                        volume down button*
+volumeup                          volume up button*
+volumemute                        mute button*
+poweroff                          turn off device*
+channelup                         move up a channel (in tv tuner)*
+channeldown                       move down a channel (in tv tuner)*
+inputtuner                        switch to tv tuner*
+inputhdmi1                        change input to to hdmi1*
+inputhdmi2                        switch to hdmi2*
+inputhdmi3                        switch to hdmi3*
+inputhdmi4                        switch to hdmi4*
+inputav1                          switch to av1*
 
 =============================================================================
 CONTRIBUTING                                                     *roku-contrib*
@@ -235,6 +235,8 @@ free to submit a PR, an issue, etc, at <https://github.com/entrez/roku.vim>.
 =============================================================================
 CHANGELOG                                                      *roku-changelog*
 
+v0.9.5 - adds multidevice support, as well as functionality related to device
+communication like |RokuRemote|, |RokuMsg| (2019-08-06)
 v0.9.4 - adds |g:roku_indent_condcomp| option & updates syntax/indentation
 regex patterns (2019-08-02)
 v0.9.3 - fixes a couple minor issues with filetype detection & syntax
