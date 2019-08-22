@@ -56,7 +56,11 @@ if [ ! -z "${CHANNEL_PATH}" ]; then
             echo "${CHANNEL_PATH} does not exist" >&2
             exit 1
         else
-            cd "${CHANNEL_PATH%/*}"
+            # without testing that ${CHANNEL_PATH%/*} and $CHANNEL_PATH are distinct locations, the script
+            # would fail when run on a file in the current directory via its relative path (i.e. just its
+            # filename) - see issue #11
+            [ "${CHANNEL_PATH}" != "${CHANNEL_PATH%/*}" ] && [ -e "${CHANNEL_PATH%/*}" ] \
+                && cd "${CHANNEL_PATH%/*}"
         fi
     fi
 fi
