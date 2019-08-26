@@ -4,7 +4,7 @@
 
 a vim plugin for roku development - provides brightscript language support (syntax highlighting, folding, section movement, indentation, etc) as well as channel installation/packaging from within vim.
 
-![](screenshot.png)
+![roku.vim screenshot](https://user-images.githubusercontent.com/40038830/63709503-0a9d8d80-c805-11e9-823e-82a8338a8df0.png)
 
 ### installation
 
