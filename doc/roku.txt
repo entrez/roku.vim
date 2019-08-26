@@ -235,6 +235,7 @@ free to submit a PR, an issue, etc, at <https://github.com/entrez/roku.vim>.
 =============================================================================
 CHANGELOG                                                      *roku-changelog*
 
+v0.9.6 - fixes bug when running |RokuInstall| on file in cwd (2019-08-26)
 v0.9.5 - adds multidevice support, as well as functionality related to device
 communication like |RokuRemote|, |RokuMsg| (2019-08-06)
 v0.9.4 - adds |g:roku_indent_condcomp| option & updates syntax/indentation
