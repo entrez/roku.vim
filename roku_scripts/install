@@ -100,7 +100,7 @@ if [ $? -eq 0 ]; then
         exit 1
     fi
 
-    resp=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "${ROKU_IP}/plugin_install" \
+    resp=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/plugin_install" \
         -F "archive=@out/bundle.zip;type:application/zip" -F "mysubmit=replace" -F "passwd=")
     result=$?
     msg="$(sed -n -E 's/.*<font color="red">([^<]+).*/\1/p' <<< "${resp}" | tr '[[:upper:]]' '[[:lower:]]')"
