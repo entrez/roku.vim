@@ -73,7 +73,7 @@ while [ $# -gt 0 ]; do
             remove=true
             ;;
         *)
-            if [ "${1::1}" == '-' ]; then
+            if [ "${1::1}" = '-' ]; then
                 echo 'usage: package [<device>] [-u|--user <user:pass>] [-p|--pkgpass <password>] [-o|--out <path>]' >&2
                 echo "error: unexpected option: ${1}" >&2
                 exit 1
@@ -127,12 +127,12 @@ else
             -F "app_name=${appname}" -F "passwd=${ROKU_PACKAGE_PASS}" -F "mysubmit=Package")
   result=$(sed -n -E 's/.*<font color="red">([^\s]*)<?/\1/p' <<< "$response")
   echo "${result}" | tr '[[:upper:]]' '[[:lower:]]' >&2
-  if [[ "${result}" == 'Success.' ]]; then
+  if [ "${result}" = 'Success.' ]; then
     packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response") && \
-    [ "${remove}" == 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${dest%/}"/*.pkg
+    [ "${remove}" = 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${dest%/}"/*.pkg
     curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/${packagepath}.pkg" \
         -o "${dest%/}/${packagepath##*/}.pkg"
-    if [[ $? -ne 0 ]]; then
+    if [ $? -ne 0 ]; then
       echo "error: failure downloading pkg [exit $?]" >&2
     else
       #echo "${dest%/}/${packagepath##*/}.pkg"

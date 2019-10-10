@@ -20,7 +20,7 @@ fi
 
 msg=$(sed 's/^.*-[mk] *//' <<<"${@}")
 
-if [[ "${op}" == '-k' ]]; then
+if [ "${op}" = '-k' ]; then
     curl -s -d '' "${ROKU_IP}:8060/keypress/${msg}"
 else
     len=${#msg}
