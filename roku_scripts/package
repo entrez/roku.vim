@@ -73,7 +73,7 @@ while [ $# -gt 0 ]; do
             remove=true
             ;;
         *)
-            if [ "${1::1}" == '-' ]; then
+            if [ "${1::1}" = '-' ]; then
                 echo 'usage: package [<device>] [-u|--user <user:pass>] [-p|--pkgpass <password>] [-o|--out <path>]' >&2
                 echo "error: unexpected option: ${1}" >&2
                 exit 1
@@ -88,7 +88,7 @@ done
 [ -n "${ROKU_IP}" ] || ROKU_IP=""
 [[ -z "${ROKU_IP}" || "${ROKU_IP}" =~ ^([0-9a-fA-F]{4}:){7}[0-9a-fA-F]{4}$ || \
     "${ROKU_IP}" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] || \
-    ROKU_IP=$(cat /etc/hosts | awk "/${ROKU_IP//\//\\/}/ { print \$1 }")
+    ROKU_IP=$(awk "!/^[[:space:]]*#/ && /${ROKU_IP//\//\\/}/ { print \$1 }" </etc/hosts)
 [ -z "${ROKU_IP}" ] && echo 'error: invalid hostname/ip' >&2 && exit 1
 
 [ -n "${ROKU_USER}" ] || ROKU_USER='rokudev'
@@ -122,16 +122,17 @@ elif [ -z "${appname}" ]; then
   echo "error: can't identify dev app" >&2
   exit 1
 else
-  response=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "${ROKU_IP}/plugin_package" \
+  response=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/plugin_package" \
             -F "pkg_time=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")" \
             -F "app_name=${appname}" -F "passwd=${ROKU_PACKAGE_PASS}" -F "mysubmit=Package")
   result=$(sed -n -E 's/.*<font color="red">([^\s]*)<?/\1/p' <<< "$response")
   echo "${result}" | tr '[[:upper:]]' '[[:lower:]]' >&2
-  if [[ "${result}" == 'Success.' ]]; then
+  if [ "${result}" = 'Success.' ]; then
     packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response") && \
-    [ "${remove}" == 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${dest%/}"/*.pkg
-    curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "${ROKU_IP}/${packagepath}.pkg" -o "${dest%/}/${packagepath##*/}.pkg"
-    if [[ $? -ne 0 ]]; then
+    [ "${remove}" = 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${dest%/}"/*.pkg
+    curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/${packagepath}.pkg" \
+        -o "${dest%/}/${packagepath##*/}.pkg"
+    if [ $? -ne 0 ]; then
       echo "error: failure downloading pkg [exit $?]" >&2
     else
       #echo "${dest%/}/${packagepath##*/}.pkg"
