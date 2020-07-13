@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+incrementbuildno () {
+    # if no filename is included, or the arg isn't a real file, bail
+    [ $# -gt 0 ] && [ -f $1 ] || return 1
+    # build number is the digits after ``build_version=''
+    buildno=$(awk -F= '/^\s*build_version=[0-9]+/ { print $2; exit }' $1)
+    # if we didn't find a build number, just make it up
+    [ -n "$buildno" ] || buildno=-1
+    # replace old build number with incremented $buildno using
+    # in-place editing (`sed -i`)
+    sed -i '' -E "s/(build_version)=[0-9]+/\1=$((++buildno))/" $1
+}
+
 INCREMENTBUILDNO=false
 while [ $# -gt 0 ]; do
     case "${1}" in
@@ -82,8 +94,7 @@ fi
 
 # increment manifest build no.
 if [ "${INCREMENTBUILDNO}" = "true" ]; then
-    buildnumber=$(sed -n -E 's/build_version=([0-9]+)\s*$/\1/p' manifest)
-    sed -i '' -E "s/(build_version)=[0-9]+/\1=$(expr ${buildnumber} + 1)/" manifest
+    incrementbuildno ./manifest
 fi
 
 [ ! -d out ] && mkdir out
