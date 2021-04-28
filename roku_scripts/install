@@ -106,7 +106,7 @@ fi
     zip -qr out/bundle.zip . -x 'out/*' '*/*.old' '.git/*' '.gitignore' '*/.gitignore' 'README*' '.DS_Store' '*/.DS_Store'
 
 if [ $? -eq 0 ]; then
-    if ! curl -d '' "${ROKU_IP}:8060/keypress/home" &>/dev/null; then
+    if ! curl -d '' "http://${ROKU_IP}:8060/keypress/home" &>/dev/null; then
         echo "no connection to roku (${ROKU_IP})"
         exit 1
     fi
