@@ -1,7 +1,3 @@
-<div align="center">
-    <img src="https://camo.githubusercontent.com/36ce7789e630a9d4f51146d6e1a67c0a7d450e53/68747470733a2f2f3078302e73742f697455482e706e67" alt="roku.vim logo" />
-</div>
-
 ## roku.vim
 
 ### overview
