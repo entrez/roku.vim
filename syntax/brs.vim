@@ -119,8 +119,8 @@ syn match brsDouble /\v<\d+(\.\d+)?#>/
 syn match brsOut /\v^\s*\zs(\?|print\s+)/ contains=ALL
 
 " comments {{{
-syn match brsComment /\v'.*$/ contains=brsTodo
-syn match brsComment /\v\c<rem .*$/ contains=brsTodo
+syn match brsComment /\v'.*$/ contains=brsTodo,@Spell
+syn match brsComment /\v\c<rem .*$/ contains=brsTodo,@Spell
 syn keyword brsTodo 
             \ TODO
             \ NB
@@ -149,7 +149,7 @@ syn match brsType /\v\c<(int|str)>\(\@1!/
 " }}}
 
 " strings
-syn region brsString start=/"/ end=/"/ contains=brsSubStr oneline 
+syn region brsString start=/"/ end=/"/ contains=brsSubStr,@Spell oneline 
 syn match brsSubStr /\v\c\{[0-9]+\}/ contained
 
 " roku component classes {{{
