@@ -88,12 +88,17 @@ if set to 1, conditional compilation statements (#if/#else/#end if) will
 trigger a change in indentation like the equivalent runtime if/else/end if
 statements. this behavior is disabled by default.
 
-
 -----------------------------------------------------------------------------
 g:roku_increment_buildno                             *g:roku_increment_buildno*
 
 if set to 1, the project's build number is incremented automatically whenever
 it is deployed to a Roku device.
+
+-----------------------------------------------------------------------------
+g:roku_epoch_buildno                                     *g:roku_epoch_buildno*
+
+if set to 1, the project's build number is set to the current UNIX epoch
+whenever it is deployed to a Roku device.
 
 -----------------------------------------------------------------------------
 g:roku_remote_keys                                         *g:roku_remote_keys*
