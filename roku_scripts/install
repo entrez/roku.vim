@@ -2,17 +2,32 @@
 
 incrementbuildno () {
     # if no filename is included, or the arg isn't a real file, bail
-    [ $# -gt 0 ] && [ -f $1 ] || return 1
+    [ $# -gt 0 ] || return 1
+    increment_style=increment
+    if [ $# -gt 1 ]; then
+        increment_style="$1"
+        shift
+    fi
+    [ -f "$1" ] || return 1
     # build number is the digits after ``build_version=''
-    buildno=$(awk -F= '/^\s*build_version=[0-9]+/ { print $2; exit }' $1)
+    buildno=$(awk -F= '/^\s*build_version=[0-9]+/ { print $2; exit }' "$1")
     # if we didn't find a build number, just make it up
     [ -n "$buildno" ] || buildno=-1
     # replace old build number with incremented $buildno using
     # in-place editing (`sed -i`)
-    sed -i '' -E "s/(build_version)=[0-9]+/\1=$((++buildno))/" $1
+    case "$increment_style" in
+        epoch)
+            new_buildno="$(date +%s)"
+            ;;
+        increment|*)
+            new_buildno=$((buildno+1))
+            ;;
+    esac
+    sed -i '' -E "s/(build_version)=[0-9]+/\1=$((new_buildno))/" "$1"
 }
 
 INCREMENTBUILDNO=false
+INCREMENTSTYLE=
 while [ $# -gt 0 ]; do
     case "${1}" in
         -h|--help|help)
@@ -27,6 +42,11 @@ while [ $# -gt 0 ]; do
             ;;
         --increment)
             INCREMENTBUILDNO=true
+            INCREMENTSTYLE=increment
+            ;;
+        --epoch-buildno)
+            INCREMENTBUILDNO=true
+            INCREMENTSTYLE=epoch
             ;;
         -d|--device)
             ROKU_IP="${2}"
@@ -94,7 +114,7 @@ fi
 
 # increment manifest build no.
 if [ "${INCREMENTBUILDNO}" = "true" ]; then
-    incrementbuildno ./manifest
+    incrementbuildno $INCREMENTSTYLE ./manifest
 fi
 
 [ ! -d out ] && mkdir out

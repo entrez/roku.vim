@@ -15,12 +15,14 @@ func! installpkg#RokuInstall(...)
     let target_devices = a:0 > 0 ? a:000 : type(g:roku_ip) == 3 ? g:roku_ip : [ g:roku_ip ]
     let increment = exists('g:roku_increment_buildno') && g:roku_increment_buildno == 1
                 \ ? '--increment' : ''
+    let use_date = exists('g:roku_epoch_buildno') && g:roku_epoch_buildno == 1
+                \ ? '--epoch-buildno' : ''
 
     for roku_ip in target_devices
         echoh Normal | echom 'compressing channel & uploading to roku (' . roku_ip . ')'
         let result = split(system(s:path . 'install "' . bufname('%') . '" ' . 
-                    \ increment . ' -u ' . g:roku_username . ':' . g:roku_password .
-                    \ ' -d ' . roku_ip), '\n')
+                    \ use_date . increment . ' -u ' . g:roku_username . ':' .
+                    \ g:roku_password . ' -d ' . roku_ip), '\n')
         echom join(result)
     endfor
 endfunc
