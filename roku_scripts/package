@@ -125,7 +125,7 @@ else
   response=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/plugin_package" \
             -F "pkg_time=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")" \
             -F "app_name=${appname}" -F "passwd=${ROKU_PACKAGE_PASS}" -F "mysubmit=Package")
-  result=$(sed -n -E 's/.*<font color="red">([^\s]*)<?/\1/p' <<< "$response")
+  result=$(sed -n -E 's/.*<font color="red">([^[:space:]<]*).*/\1/p' <<< "$response")
   echo "${result}" | tr '[[:upper:]]' '[[:lower:]]' >&2
   if [ "${result}" = 'Success.' ]; then
     packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response") && \
