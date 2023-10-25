@@ -126,7 +126,7 @@ else
             -F "pkg_time=$(date "+%s")" -F "app_name=${appname}" -F "passwd=${ROKU_PACKAGE_PASS}" \
             -F "mysubmit=Package")
   result=$(sed -n -E 's/.*<font color="red">([^[:space:]<]*).*/\1/p' <<< "$response")
-  echo "${result}" | tr '[[:upper:]]' '[[:lower:]]' >&2
+  echo "${result}" | tr '[:upper:]' '[:lower:]' >&2
   if [ "${result}" = 'Success.' ]; then
     packagepath=$(sed -n -E 's/.*pkgPath":"([^.]+)\.pkg".*/\1/p' <<< "$response")
     oldpkgs=("${dest%/}"/*.pkg)
@@ -137,9 +137,8 @@ else
         echo "error: unable to locate new pkg for download" >&2
         exit 1
     fi
-    curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/${packagepath}.pkg" \
-        -o "${dest%/}/${packagepath##*/}.pkg"
-    if [ $? -ne 0 ]; then
+    if ! curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/${packagepath}.pkg" \
+        -o "${dest%/}/${packagepath##*/}.pkg"; then
       echo "error: failure downloading pkg [exit $?]" >&2
     else
       [ "${remove}" = 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${oldpkgs[@]}"
