@@ -133,6 +133,10 @@ else
     if [ -z "$packagepath" ]; then
         packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response")
     fi
+    if [ -z "$packagepath" ]; then
+        echo "error: unable to locate new pkg for download" >&2
+        exit 1
+    fi
     curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/${packagepath}.pkg" \
         -o "${dest%/}/${packagepath##*/}.pkg"
     if [ $? -ne 0 ]; then
