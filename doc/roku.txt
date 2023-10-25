@@ -247,6 +247,8 @@ free to submit a PR, an issue, etc, at <https://github.com/entrez/roku.vim>.
 =============================================================================
 CHANGELOG                                                      *roku-changelog*
 
+v0.9.10 - updates 'package' to be compatible with recent changes to the Roku
+web interface, misc other minor fixes (2023-10-25)
 v0.9.9 - adds `g:roku_epoch_buildno` (2023-09-25)
 v0.9.8 - adds `g:roku_increment_buildno` and updates some other miscellaneous
 vim settings (2020-07-13)
