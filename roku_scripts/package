@@ -128,8 +128,11 @@ else
   result=$(sed -n -E 's/.*<font color="red">([^[:space:]<]*).*/\1/p' <<< "$response")
   echo "${result}" | tr '[[:upper:]]' '[[:lower:]]' >&2
   if [ "${result}" = 'Success.' ]; then
-    packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response") && \
-    [ "${remove}" = 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${dest%/}"/*.pkg
+    packagepath=$(sed -n -E 's/.*pkgPath":"([^.]+)\.pkg".*/\1/p' <<< "$response")
+    if [ -z "$packagepath" ]; then
+        packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response")
+    fi
+    [ -n "$packagepath" ] && [ "${remove}" = 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${dest%/}"/*.pkg
     curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/${packagepath}.pkg" \
         -o "${dest%/}/${packagepath##*/}.pkg"
     if [ $? -ne 0 ]; then
