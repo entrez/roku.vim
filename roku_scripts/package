@@ -123,12 +123,13 @@ elif [ -z "${appname}" ]; then
   exit 1
 else
   response=$(curl -fLs -u "${ROKU_USER}:${ROKU_PASS}" --digest "http://${ROKU_IP}/plugin_package" \
-            -F "pkg_time=$(date -j -f "%a %b %d %T %Z %Y" "`date`" "+%s")" \
-            -F "app_name=${appname}" -F "passwd=${ROKU_PACKAGE_PASS}" -F "mysubmit=Package")
+            -F "pkg_time=$(date "+%s")" -F "app_name=${appname}" -F "passwd=${ROKU_PACKAGE_PASS}" \
+            -F "mysubmit=Package")
   result=$(sed -n -E 's/.*<font color="red">([^[:space:]<]*).*/\1/p' <<< "$response")
   echo "${result}" | tr '[[:upper:]]' '[[:lower:]]' >&2
   if [ "${result}" = 'Success.' ]; then
     packagepath=$(sed -n -E 's/.*pkgPath":"([^.]+)\.pkg".*/\1/p' <<< "$response")
+    oldpkgs=("${dest%/}"/*.pkg)
     if [ -z "$packagepath" ]; then
         packagepath=$(sed -n -E 's/.*Currently Packaged Application:.+href="(.+)\.pkg".*/\1/p' <<< "$response")
     fi
@@ -137,7 +138,7 @@ else
     if [ $? -ne 0 ]; then
       echo "error: failure downloading pkg [exit $?]" >&2
     else
-      [ "${remove}" = 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${dest%/}"/*.pkg
+      [ "${remove}" = 'true' ] && [ -n "$(ls "${dest%/}"/*.pkg 2>/dev/null)" ] && rm "${oldpkgs[@]}"
       #echo "${dest%/}/${packagepath##*/}.pkg"
       echo "${packagepath##*/}.pkg"
     fi
