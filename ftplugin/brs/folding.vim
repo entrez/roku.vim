@@ -3,6 +3,11 @@ setl fde=BrsFold(v:lnum)
 setl fml=2
 
 func! BrsFold(lnum)
+    " check if folding is enabled
+    if g:disableAutoFolding == 1
+        return '0'
+    endif
+
     if getline(a:lnum) =~? '\v^\s*$'
         return '-1'
     endif
